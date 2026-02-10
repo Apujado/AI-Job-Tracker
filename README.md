@@ -8,6 +8,23 @@ Automate your job search: Gmail → Gemini AI → Google Sheets → Airtable
 
 Ce projet automatise la veille d'offres d'emploi. Un script récupère les alertes Gmail, les analyse avec l'IA Gemini, et les synchronise avec Airtable après validation manuelle.
 
+## 🎨 Schéma du Workflow
+
+📩 GMAIL (Alertes Emploi)
+       │
+       ▼
+⚙️ GOOGLE APPS SCRIPT (Le Cerveau) 
+       │ ───▶ 🧠 GEMINI 1.5 FLASH (Analyse & Scoring IA)
+       ▼
+📊 GOOGLE SHEETS (Interface de Validation)
+       │ ───▶ ✅ Clic de validation humaine
+       ▼
+🗄️ AIRTABLE (Le CRM de suivi)
+       │
+       ▼
+📈 POWER BI (Tableau de bord de pilotage)
+       └───▶ 🔄 Refresh quotidien automatisé
+
 ## 🚀 Features
 
 - **Intelligent Analysis**: Extracts job title, company, link, and calculates matching score using Gemini 1.5 Flash
