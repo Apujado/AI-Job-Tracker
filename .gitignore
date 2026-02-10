@@ -1,0 +1,9 @@
+# Fichiers système
+.DS_Store
+Thumbs.db
+
+# Dossiers de configuration VS Code
+.vscode/
+
+# Si jamais tu utilises clasp plus tard
+.clasp.json
