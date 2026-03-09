@@ -10,8 +10,8 @@ Ce projet automatise la veille d'offres d'emploi. Un script récupère les alert
 ## 🚀 Features
 
 * **Intelligent Analysis**: Analyse sémantique des offres pour extraire le titre, l'entreprise et le lien.
-* **Custom Scoring**: Calcul d'un score de matching strict (0-100) basé sur une stack technique cible (SQL, dbt, Power BI).
-* **Automated Filters**: Élimination immédiate des offres hors zone (Annecy, Genève, Remote) ou non pertinentes (Stages, Alternances).
+* **Custom Scoring**: Calcul d'un score de matching strict (0-100).
+* **Automated Filters**: Élimination immédiate des offres hors zone ou non pertinentes (Stages, Alternances).
 * **Human-in-the-Loop**: Les offres apparaissent dans Google Sheets (Staging Area). La synchro vers Airtable ne se déclenche qu'après coche manuelle.
 * **Serverless**: Fonctionne 24h/24 via Google Apps Script (sans frais d'hébergement).
 
