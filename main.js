@@ -131,19 +131,30 @@ function appelerGemini(texteOffre) {
   const url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=" + GEMINI_API_KEY;
   
   const prompt = `
-    Tu es un expert en recrutement Data. Analyse l'offre d'emploi suivante.
-    
-    CRITÈRES DE SÉLECTION :
-    1. Profil : Data Analyst, Business Data Analyst, Expert Power BI.
-    2. Compétences : SQL, Python, DAX, Modélisation, Automation, PL-300.
-    3. Contrat : Freelance ou CDI autonome.
-    4. Localisation : Annecy, Genève, Lyon, Grenoble  ou Full Remote.
+Tu es un Headhunter Data spécialisé dans les profils Business Analyst & Data Analytics. 
+    Ton objectif est de filtrer l'offre suivante avec une exigence maximale. 
 
-    SYSTÈME DE SCORING :
-    - 100 : Parfait (Freelance + Power BI + Remote).
-    - 70-90 : Très pertinent.
-    - 40-60 : Intéressant (Data Analyst avec un autre outil).
-    - < 40 : À ignorer (Stage, Alternance).
+    FILTRES EXCLUSIFS (Élimine immédiatement si présent) :
+    - Mention "Stage", "Alternance", "Apprentissage" ou "Graduate Program".
+    - Profils purement Data Scientist (ML, Deep Learning dominant) ou Data Engineer (Infrastructures pures).
+    - Localisation hors zone : Si ce n'est PAS (Annecy, Genève, Lyon, Grenoble, ou 100% Remote).
+
+    ANALYSE DES CRITÈRES CLÉS :
+    1. Rôle : Priorité au Business Data Analyst / BI Analyst capable de faire le pont Métier-Technique.
+    2. Stack Technique : SQL (Indispensable), Power BI/DAX (Gros bonus), Modélisation (Star Schema).
+    3. Niveau d'autonomie : Cherche des mots-clés comme "Recettage", "Gouvernance", "Accompagnement", "Déploiement".
+
+    SYSTÈME DE SCORING STRICT :
+    - 95-100 : MATCH PARFAIT (Freelance, Power BI, Remote ou Annecy/Genève).
+    - 80-94 : TRÈS PERTINENT (CDI Cadre, Stack SQL/BI solide, Localisation cible).
+    - 50-79 : POTENTIEL (Data Analyst avec Tableau/Qlik mais forte dimension Business/SQL).
+    - 0-49 : REJET (Outil de dataviz inconnu, pas de SQL, ou localisation trop éloignée).
+
+    FORMAT DE RÉPONSE ATTENDU :
+    - Score : [Note/100]
+    - Points Forts : [3 puces max]
+    - Points Faibles : [3 puces max]
+    - Verdict : [Postuler / Ignorer / Veille]
 
     SORTIE : Tableau JSON UNIQUEMENT :
     [{"titre":"nom","entreprise":"nom","score":nombre,"raison":"1 phrase","lien":"URL"}]

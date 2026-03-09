@@ -1,51 +1,62 @@
 
-I'll help you structure this markdown for better readability and professionalism:
-
-```markdown
 # 🤖 AI Job Hunter Tracker
 
-Automate your job search: Gmail → Gemini AI → Google Sheets → Airtable
+**Automate your job search: Gmail → Gemini AI → Google Sheets → Airtable**
 
-Ce projet automatise la veille d'offres d'emploi. Un script récupère les alertes Gmail, les analyse avec l'IA Gemini, et les synchronise avec Airtable après validation manuelle.
+Ce projet automatise la veille d'offres d'emploi. Un script récupère les alertes Gmail, les analyse avec l'IA Gemini 2.0 Flash, et les synchronise avec Airtable après une validation manuelle.
 
-## 🎨 Schéma du Workflow
-
-📩 GMAIL (Alertes Emploi)
-       │
-       ▼
-⚙️ GOOGLE APPS SCRIPT (Le Cerveau) 
-       │ ───▶ 🧠 GEMINI 1.5 FLASH (Analyse & Scoring IA)
-       ▼
-📊 GOOGLE SHEETS (Interface de Validation)
-       │ ───▶ ✅ Clic de validation humaine
-       ▼
-🗄️ AIRTABLE (Le CRM de suivi)
-       │
-       ▼
-📈 POWER BI (Tableau de bord de pilotage)
-       └───▶ 🔄 Refresh quotidien automatisé
+---
 
 ## 🚀 Features
 
-- **Intelligent Analysis**: Extracts job title, company, link, and calculates matching score using Gemini 1.5 Flash
-- **Human Validation**: Job offers appear in Google Sheets and sync to Airtable only after manual approval
-- **Cloud Native**: Runs entirely on Google Apps Script (no server required)
+* **Intelligent Analysis**: Analyse sémantique des offres pour extraire le titre, l'entreprise et le lien.
+* **Custom Scoring**: Calcul d'un score de matching strict (0-100).
+* **Automated Filters**: Élimination immédiate des offres hors zone ou non pertinentes (Stages, Alternances).
+* **Human-in-the-Loop**: Les offres apparaissent dans Google Sheets (Staging Area). La synchro vers Airtable ne se déclenche qu'après coche manuelle.
+* **Serverless**: Fonctionne 24h/24 via Google Apps Script (sans frais d'hébergement).
+
+---
 
 ## 🛠️ Tech Stack
 
-| Component | Technology                                  |
-|-----------|---------------------------------------------|
-| Platform  | Google Apps Script, Google Sheets, Airtable |
-| AI        | Google Gemini API                           |
-| Language  | JavaScript                                  |
+| Composant | Technologie | Rôle |
+| :--- | :--- | :--- |
+| **Platform** | Google Apps Script | Automatisation & Hébergement |
+| **AI Model** | Google Gemini 2.0 Flash | NER (Extraction d'entités) & Scoring |
+| **Staging** | Google Sheets | Visualisation & Validation Humaine |
+| **CRM** | Airtable API | Gestion finale des Leads |
+| **Language** | JavaScript (ES6+) | Développement |
 
-## ⚙️ Installation
+---
 
-1. Create a project on [Google Apps Script](https://script.google.com/)
-2. Copy code from `main.js`
-3. Configure **Script Properties** with your API keys:
-    - `GEMINI_API_KEY`
-    - `AIRTABLE_API_KEY`
-    - `AIRTABLE_BASE_ID`
-4. Add a time-based trigger for the `agentEmploiAurelie` function
-```
+## ⚙️ Architecture & Data Pipeline
+
+Le script suit une logique de pipeline **ETL** (Extract, Transform, Load) :
+
+1.  **Extraction (E)** : Monitoring des threads Gmail via `GmailApp` avec filtrage par Label.
+2.  **Transformation (T)** : 
+    * Nettoyage du corps du mail et analyse via l'API Gemini.
+    * **Déduplication** : Utilisation d'une clé composite `titre|entreprise` pour éviter les doublons.
+3.  **Validation & Chargement (L)** : 
+    * Injection en Staging Area (Sheets).
+    * **Event-Driven Sync** : Utilisation du trigger `onEdit(e)` pour pousser les données vers Airtable uniquement après validation.
+
+---
+
+## 🛡️ Installation & Setup
+
+1.  Créez un projet sur [Google Apps Script](https://script.google.com/).
+2.  Copiez le contenu de `main.js`.
+3.  Configurez les **Script Properties** avec vos clés :
+    * `GEMINI_API_KEY`
+    * `AIRTABLE_API_KEY`
+    * `AIRTABLE_BASE_ID`
+4.  Ajoutez un trigger temporel (ex: toutes les heures) sur la fonction `agentEmploiAurelie`.
+5.  Prévoyez une case à cocher en colonne **H** de votre feuille Google Sheets.
+
+---
+
+## 📝 Key Learnings
+* Maîtrise du **Prompt Engineering** pour obtenir un JSON valide en sortie d'IA.
+* Gestion des secrets et des variables d'environnement.
+* Manipulation d'APIs tierces (REST) et gestion des payloads JSON.
