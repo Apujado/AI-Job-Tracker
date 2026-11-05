@@ -1,62 +1,47 @@
+# 🤖 AI Job Hunter Tracker — Pipeline d'Automatisation & Scoring IA
 
-# 🤖 AI Job Hunter Tracker
-
-**Automate your job search: Gmail → Gemini AI → Google Sheets → Airtable**
-
-Ce projet automatise la veille d'offres d'emploi. Un script récupère les alertes Gmail, les analyse avec l'IA Gemini 2.0 Flash, et les synchronise avec Airtable après une validation manuelle.
+Un pipeline ETL Serverless intelligent qui automatise la veille d'opportunités professionnelles : extraction des alertes Gmail, analyse sémantique et scoring par LLM (Gemini 2.0 Flash), zone de validation (Google Sheets) et synchronisation event-driven vers Airtable.
 
 ---
 
-## 🚀 Features
+## 🚀 Fonctionnalités Clés
 
-* **Intelligent Analysis**: Analyse sémantique des offres pour extraire le titre, l'entreprise et le lien.
-* **Custom Scoring**: Calcul d'un score de matching strict (0-100).
-* **Automated Filters**: Élimination immédiate des offres hors zone ou non pertinentes (Stages, Alternances).
-* **Human-in-the-Loop**: Les offres apparaissent dans Google Sheets (Staging Area). La synchro vers Airtable ne se déclenche qu'après coche manuelle.
-* **Serverless**: Fonctionne 24h/24 via Google Apps Script (sans frais d'hébergement).
+- **Analyse Sémantique & NER :** Extraction automatique du titre de poste, de l'entreprise, du lien et des métadonnées clés via l'API Gemini.
+- **Scoring Sur-Mesure (0–100) :** Évaluation stricte de l'adéquation de l'offre par rapport aux critères définis.
+- **Filtrage Automatique :** Élimination immédiate des offres hors périmètre géographique ou des profils non ciblés (stages, alternances).
+- **Architecture Human-in-the-Loop :** Zone de staging (Google Sheets) permettant une validation humaine avant injection finale.
+- **Synchronisation Event-Driven :** Déclenchement automatique via trigger `onEdit` dès validation manuelle vers le CRM (Airtable).
+- **Hébergement Serverless (0€) :** Exécution 24/7 fiable via Google Apps Script.
 
 ---
 
-## 🛠️ Tech Stack
+## 🛠️ Stack Technique
 
 | Composant | Technologie | Rôle |
 | :--- | :--- | :--- |
-| **Platform** | Google Apps Script | Automatisation & Hébergement |
-| **AI Model** | Google Gemini 2.0 Flash | NER (Extraction d'entités) & Scoring |
-| **Staging** | Google Sheets | Visualisation & Validation Humaine |
-| **CRM** | Airtable API | Gestion finale des Leads |
-| **Language** | JavaScript (ES6+) | Développement |
+| **Plateforme** | Google Apps Script | Automatisation & Hébergement Serverless |
+| **Moteur IA** | Google Gemini 2.0 Flash | Extraction d'entités (NER) & Scoring sémantique |
+| **Staging Area** | Google Sheets | Interface de contrôle & Validation humaine |
+| **CRM / Base finale** | Airtable API | Centralisation & Suivi des Leads |
+| **Langage** | JavaScript (ES6+) | Logiciel & Intégration API |
 
 ---
 
-## ⚙️ Architecture & Data Pipeline
+## ⚙️ Architecture & Data Pipeline (ETL)
 
-Le script suit une logique de pipeline **ETL** (Extract, Transform, Load) :
-
-1.  **Extraction (E)** : Monitoring des threads Gmail via `GmailApp` avec filtrage par Label.
-2.  **Transformation (T)** : 
-    * Nettoyage du corps du mail et analyse via l'API Gemini.
-    * **Déduplication** : Utilisation d'une clé composite `titre|entreprise` pour éviter les doublons.
-3.  **Validation & Chargement (L)** : 
-    * Injection en Staging Area (Sheets).
-    * **Event-Driven Sync** : Utilisation du trigger `onEdit(e)` pour pousser les données vers Airtable uniquement après validation.
-
----
-
-## 🛡️ Installation & Setup
-
-1.  Créez un projet sur [Google Apps Script](https://script.google.com/).
-2.  Copiez le contenu de `main.js`.
-3.  Configurez les **Script Properties** avec vos clés :
-    * `GEMINI_API_KEY`
-    * `AIRTABLE_API_KEY`
-    * `AIRTABLE_BASE_ID`
-4.  Ajoutez un trigger temporel (ex: toutes les heures) sur la fonction `agentEmploiAurelie`.
-5.  Prévoyez une case à cocher en colonne **H** de votre feuille Google Sheets.
-
----
-
-## 📝 Key Learnings
-* Maîtrise du **Prompt Engineering** pour obtenir un JSON valide en sortie d'IA.
-* Gestion des secrets et des variables d'environnement.
-* Manipulation d'APIs tierces (REST) et gestion des payloads JSON.
+```text
+[ Gmail Alerts ] ──> (Extract) ──> [ Apps Script ]
+                                         │
+                                   (Transform)
+                                         │
+                                  [ Gemini API ] (NER & Scoring JSON)
+                                         │
+                                         ▼
+                                 [ Google Sheets ] (Staging Area)
+                                         │
+                                    (Human Check)
+                                         │
+                                   (Trigger Load)
+                                         │
+                                         ▼
+                                  [ Airtable CRM ]
